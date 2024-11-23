@@ -74,17 +74,14 @@ dilihat pada data dibawah ini tidak terdapat missing values sehingga data siap d
 ## Data Preparation
 Bagian ini menjelaskan tahapan persiapan data yang dilakukan untuk memproses dataset sebelum digunakan dalam model rekomendasi. Tahapan tersebut meliputi pemeriksaan data yang hilang, pembersihan outlier, encoding kolom kategorikal, normalisasi rating, serta pembagian data menjadi set pelatihan dan validasi. Berikut adalah rincian proses yang dilakukan:
 
-1. Memeriksa Missing Values:
-- Menggunakan isnull().sum() untuk memeriksa apakah terdapat nilai yang hilang (missing values) pada dataset.
-- Jika ada, langkah berikutnya adalah menangani atau menghapus baris yang mengandung missing values.
+1. Penggabungan dataset: 
+- penggabungan ini bertujuan agar memudahkan dalam proses analisis serta melatih model
+- Dataset digabung berdasarkan kolom item_id menggunakan metode inner join agar hanya data yang memiliki pasangan di kedua dataset yang dimasukkan ke dataset gabungan.
 2. Menghapus Outlier:
 - Outlier diidentifikasi dengan metode Interquartile Range (IQR), di mana nilai yang berada di luar rentang Q1 - 1.5 * IQR dan Q3 + 1.5 * IQR dianggap sebagai outlier.
 - Fungsi remove_outliers() digunakan untuk menghapus baris yang mengandung outlier pada kolom numerik (user_id, item_id, dan timestamp).
 - Setelah penghapusan outlier, jumlah data yang tersisa dan persentase data yang dihapus ditampilkan.
-3. Visualisasi Data Sebelum dan Sesudah Menghapus Outlier:
-- Menampilkan histogram untuk melihat distribusi data sebelum dan setelah pembersihan outlier pada kolom numerik (user_id, item_id, timestamp).
-- Visualisasi ini membantu untuk memahami dampak penghapusan outlier terhadap distribusi data.
-4. Encoding user_id dan item_id:
+3. Encoding user_id dan item_id:
 - user_id dan item_id yang berupa nilai kategorikal diubah menjadi bentuk numerik dengan cara menghilangkan duplikasi dan membuat mapping encoding.
 - Setiap ID unik diberi nomor indeks, dan dua dictionary dibuat untuk melakukan mapping:
 
@@ -92,15 +89,15 @@ Bagian ini menjelaskan tahapan persiapan data yang dilakukan untuk memproses dat
 
   b. item_to_item_encoded: Mapping dari item_id ke angka.
 - Proses ini bertujuan untuk memudahkan pemrosesan data dalam model machine learning.
-5. Menambahkan Kolom user dan item:
+4. Menambahkan Kolom user dan item:
 - Kolom user_id dan item_id di-mapping ke nilai numerik menggunakan dictionary encoding yang telah dibuat.
 - Hasil mapping ini disimpan dalam kolom baru user dan item dalam dataset.
-6. Normalisasi Rating:
+5. Normalisasi Rating:
 - Rating pada dataset diubah menjadi tipe data float32 untuk memastikan konsistensi tipe data.
 - Nilai rating kemudian dinormalisasi ke dalam rentang 0 hingga 1 dengan formula:
 normalized_rating = (rating − min rating) / (max rating − min rating)
 - Hal ini bertujuan untuk mengubah rating asli agar lebih konsisten dalam rentang nilai yang lebih mudah dikelola oleh model.
-7. Pembagian Data (Training dan Validation):
+6. Pembagian Data (Training dan Validation):
 - Data diacak terlebih dahulu menggunakan sample(frac=1, random_state=42) untuk memastikan distribusi yang acak pada pembagian data.
 - Data kemudian dibagi menjadi dua set: 80% untuk pelatihan (train) dan 20% untuk validasi (val).
 - Set data pelatihan (x_train, y_train) digunakan untuk melatih model, sedangkan set data validasi (x_val, y_val) digunakan untuk mengevaluasi performa model.
@@ -129,6 +126,23 @@ normalized_rating = (rating − min rating) / (max rating − min rating)
 - Batch size: 64 untuk memproses data dalam batch.
 - Epochs: 10, untuk melatih model selama 10 kali iterasi.
 - Data validasi: x_val dan y_val digunakan untuk memantau kinerja model pada data yang tidak terlihat selama pelatihan.
+
+4. Hasil
+## menampilkan hasil rekomendasi untuk pengguna
+
+Rekomendasi untuk pengguna 75 top 10:
+| #   | Nama film                         | tahun |
+|-----|-----------------------------------|-------|
+| 1   | Silence of the Lambs, Th          |  1991 |
+| 2   | Birds, The                        |  1963 |
+| 3   | Boot, Das                         |  1981 |
+| 4   | Murder at 1600                    |  1997 |
+| 5   | U Turn                            |  1997 |
+| 6   | Cop Land                          |  1997 |
+| 7   | Mr. Holland's Opus                |  1995 |
+| 8   | Sense and Sensibility             |  1995 |
+| 9   | Some Folks Call It a Sling Blade  |  1993 |
+| 10  | While You Were Sleeping           |  1995 |
 
 ## Evaluation
 Metrik Evaluasi yang digunakan yaitu:
@@ -165,14 +179,18 @@ Recall mengukur sejauh mana model berhasil menangkap semua prediksi yang relevan
 Rumus: Recall = True Positives / (True Positives + False Negatives)
 
 
-Hasil Evaluasi: 
-RMSE: 0.2436
-MAE: 0.1961
-Precision: 0.9076
-Recall: 0.7785
+## Hasil Evaluasi: 
+RMSE: 0.2443
+
+MAE: 0.1967
+
+Precision: 0.9080
+
+Recall: 0.7751
 
 kesimpulan: 
 1. Model rekomendasi yang dikembangkan menggunakan algoritma Collaborative Filtering berbasis Matrix Factorization dengan teknik embedding berhasil memberikan rekomendasi film yang relevan berdasarkan preferensi pengguna. Evaluasi model menunjukkan bahwa model ini dapat memprediksi rating pengguna dengan baik, yang dibuktikan melalui metrik RMSE dan MAE yang menunjukkan kesalahan prediksi yang relatif rendah. Selain itu, model ini menunjukkan kinerja yang baik dalam hal Precision dan Recall, yang mengindikasikan bahwa model berhasil mengidentifikasi rekomendasi yang relevan dengan baik dan mengurangi rekomendasi yang tidak relevan.
 2. Model ini berhasil menjawab permasalahan dengan memberikan saran film yang sesuai dengan preferensi individu pengguna. Proses pelatihan dengan data historis rating film serta penggunaan embedding untuk merepresentasikan pengguna dan item memungkinkan model menghasilkan rekomendasi yang lebih akurat dan personal.
 3. Hasil evaluasi menunjukkan bahwa model Collaborative Filtering ini memberikan dampak positif terhadap kualitas rekomendasi, di mana teknik preprocessing untuk menangani nilai yang hilang dan normalisasi data memberikan stabilitas dan akurasi yang lebih baik dibandingkan dengan metode lain. Metrik yang dihasilkan menunjukkan bahwa model mampu meningkatkan pengalaman pengguna dengan memberikan rekomendasi yang lebih relevan dan personal, yang berpotensi meningkatkan kepuasan pengguna dan retensi pengguna di platform streaming.
 4. Dengan demikian, penerapan model ini terbukti efektif dalam menciptakan sistem rekomendasi yang dapat memberikan rekomendasi film yang lebih sesuai dengan preferensi individu, serta mendukung platform streaming untuk meningkatkan kualitas layanan dan interaksi pengguna.
+
