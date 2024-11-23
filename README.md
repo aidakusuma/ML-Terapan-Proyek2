@@ -8,8 +8,9 @@ Sistem rekomendasi film dapat diterapkan dalam berbagai platform streaming, sepe
 
 Berbagai studi tentang sistem rekomendasi film dengan menggunakan machine learning antara lain:
 
-Agerri, R., & Garcia-Serrano, A. (2022). Recommender Systems: A Comparative Study of Collaborative Filtering and Content-Based Techniques. Journal of Computational Science, 42(1), 93-110. https://doi.org/10.1016/j.jocs.2022.101234
-Kaur, R., & Singh, H. (2023). A Review of Hybrid Approaches in Recommender Systems for Movie Suggestions. International Journal of Computer Applications, 175(9), 72-78. https://doi.org/10.5120/ijca202392158
+Zhang, R., Liu, Q. D., & Wei, J. X. (2014, November). Collaborative filtering for recommender systems. In 2014 second international conference on advanced cloud and big data (pp. 301-308). IEEE.
+
+Kumar, M., Yadav, D. K., Singh, A., & Gupta, V. K. (2015). A movie recommender system: Movrec. International journal of computer applications, 124(3).
 
 ### Mengapa masalah ini perlu diselesaikan?
 - Kepuasan Pengguna: Pengguna sering merasa kewalahan dengan banyaknya pilihan film yang tersedia. Dengan adanya sistem rekomendasi, pengguna dapat lebih mudah menemukan film yang sesuai dengan selera mereka, meningkatkan kepuasan pengguna.
